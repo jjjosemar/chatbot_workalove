@@ -67,7 +67,7 @@ export const Message = styled.p`
     }
 `;
 
-export const SubmitButton = styled.button`
+export const NextStepButton = styled.button`
     position: absolute;
     right: 20px;
     bottom: 10px;
@@ -84,6 +84,29 @@ export const SubmitButton = styled.button`
     font-size: 18px;
     width: 35px;
     height: 35px;
+`;
+
+export const SubmitButton = styled.button`
+    background-color: #6200ea; 
+    color: #fff; 
+    font-size: 16px;  
+    font-weight: bold;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    transition: all 0.3s ease; 
+    margin: 20px auto;
+    display: block;
+    
+    &:hover {
+        background-color: #3700b3; 
+    }
+
+    &:focus {
+        outline: none; 
+        box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
+    }
 `;
 
 export const UserResponse = styled.div`
@@ -113,4 +136,19 @@ export const ContainerIconBot = styled.div`
     align-self: flex-end;
     margin-block-start: 1em;
     margin-block-end: 1em;
+`;
+
+export const SuccessMessage = styled.h5`
+  display: block;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #c3e6cb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;

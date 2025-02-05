@@ -8,7 +8,7 @@ import {
     ContainerMessage,
     HeaderChat,
     Message,
-    SubmitButton,
+    NextStepButton, SubmitButton, SuccessMessage,
     UserResponse
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
@@ -28,6 +28,8 @@ const ChatBot: React.FC = () => {
     const formRef =  useRef<FormHandles>(null);
     const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<Partial<FormData>>({});
+    const [isRated, setIsRated] = useState<boolean>(false);
+    const [isFinish, setIsFinish] = useState<boolean>(false);
 
     const handleNextStep = async (data: Partial<FormData>, field: string) => {
         try {
@@ -77,10 +79,21 @@ const ChatBot: React.FC = () => {
         }
     }, [step]);
 
+    const handleRating = (rating: number) => {
+        setFormData({ ...formData, rating });
+        setIsRated(true);
+    };
+
+    const handleSave = () => {
+        console.log('===== informações coletadas =====');
+        console.log(formData);
+        setIsFinish(true);
+    };
+
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <Form ref={formRef} onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
+            <Form ref={formRef} onSubmit={handleSubmit}>
                 <ContainerForm id={"containerForm"}>
                     {step >= 0 && (
                         <>
@@ -146,21 +159,33 @@ const ChatBot: React.FC = () => {
                             </>}
                         </div>
                     )}
-                    {step === 3 && (
-                        <div>
+                    {step >= 3 && (
+                        <>
                             <ContainerMessage>
                                 <ContainerIconBot>
                                     <LuBot size={30}/>
                                 </ContainerIconBot>
                                 <Message>Você finalizou o teste. Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</Message>
                             </ContainerMessage>
-                            <RatingStars onRate={(rating) => setFormData({ ...formData, rating })} />
-                        </div>
+                            <RatingStars onRate={handleRating} />
+                            {isRated && !isFinish && <>
+                              <SubmitButton type={"button"} onClick={handleSave}>
+                                Salvar
+                              </SubmitButton>
+                            </>}
+                            {isFinish && <>
+                              <SuccessMessage>
+                                Seus dados foram salvos com sucesso! Agradecemos pela sua participação.
+                              </SuccessMessage>
+                            </>}
+                        </>
                     )}
                 </ContainerForm>
-                <SubmitButton type="button" onClick={handleSubmit}>
-                    {step < 3 ? <IoMdSend color={'#f0f'}/> : 'Enviar'}
-                </SubmitButton>
+                {step < 3 && <>
+                  <NextStepButton type="button" onClick={handleSubmit}>
+                    <IoMdSend color={'#f0f'}/>
+                  </NextStepButton>
+                </>}
             </Form>
         </ChatContainer>
     );
