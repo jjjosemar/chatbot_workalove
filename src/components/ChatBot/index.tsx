@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Form} from '@unform/web';
 import * as Yup from 'yup';
 import {
@@ -6,16 +6,17 @@ import {
     ContainerForm,
     ContainerIconBot,
     ContainerMessage,
-    ErrorMessage,
     HeaderChat,
     Message,
-    Star,
     SubmitButton,
     UserResponse
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
 import {LuBot} from "react-icons/lu";
 import InputCustom from "../Form/Input";
+import RatingStars from "../RatingStars";
+import {ValidationError} from "yup";
+import {FormHandles} from "@unform/core";
 
 interface FormData {
     name: string;
@@ -24,9 +25,9 @@ interface FormData {
     rating: number;
 }
 const ChatBot: React.FC = () => {
+    const formRef =  useRef<FormHandles>(null);
     const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<Partial<FormData>>({});
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleNextStep = async (data: Partial<FormData>, field: string) => {
         try {
@@ -40,12 +41,19 @@ const ChatBot: React.FC = () => {
             }
             if (schema) await schema.validate(data, { abortEarly: false });
 
-            setErrors({});
             setFormData((prev) => ({ ...prev, ...data }));
             setStep((prevStep) => prevStep + 1);
         } catch (err) {
             if (err instanceof Yup.ValidationError) {
-                setErrors({ [field]: err.errors[0] });
+                const validationErrors: Record<string, string> = {};
+
+                err.inner.forEach((error : ValidationError) => {
+                    if (error.path) {
+                        validationErrors[error.path] = error.message;
+                    }
+                });
+
+                formRef.current?.setErrors(validationErrors);
             }
         }
     };
@@ -63,13 +71,16 @@ const ChatBot: React.FC = () => {
     };
 
     useEffect(() => {
-        document.getElementById('containerForm').scrollIntoView({ behavior: 'smooth', block: 'end' });
+        const containerForm = document.getElementById('containerForm');
+        if (containerForm) {
+            containerForm.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
     }, [step]);
 
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <Form onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
+            <Form ref={formRef} onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
                 <ContainerForm id={"containerForm"}>
                     {step >= 0 && (
                         <>
@@ -85,10 +96,8 @@ const ChatBot: React.FC = () => {
                                 <InputCustom
                                     type="text"
                                     name="name"
-                                    hasError={!!errors.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
-                                {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
                             </>}
                         </>
                     )}
@@ -107,7 +116,6 @@ const ChatBot: React.FC = () => {
                                     type="text"
                                     name="location"
                                     list="cities"
-                                    hasError={!!errors.location}
                                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                                 />
                                 <datalist id="cities">
@@ -116,7 +124,6 @@ const ChatBot: React.FC = () => {
                                     <option value="Belo Horizonte, MG" />
                                     <option value="Curitiba, PR" />
                                 </datalist>
-                                {errors.location && <ErrorMessage>{errors.location}</ErrorMessage>}
                             </>}
                         </>
                     )}
@@ -132,12 +139,10 @@ const ChatBot: React.FC = () => {
                                 <UserResponse>{formData.email}</UserResponse>
                             ) : <>
                                 <InputCustom
-                                    type="email"
+                                    type="text"
                                     name="email"
-                                    hasError={!!errors.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
-                                {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                             </>}
                         </div>
                     )}
@@ -149,11 +154,7 @@ const ChatBot: React.FC = () => {
                                 </ContainerIconBot>
                                 <Message>Você finalizou o teste. Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</Message>
                             </ContainerMessage>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star key={star} onClick={() => setFormData({ ...formData, rating: star })}>
-                                    ⭐
-                                </Star>
-                            ))}
+                            <RatingStars onRate={(rating) => setFormData({ ...formData, rating })} />
                         </div>
                     )}
                 </ContainerForm>

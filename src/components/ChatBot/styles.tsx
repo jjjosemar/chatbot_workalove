@@ -66,14 +66,6 @@ export const Message = styled.p`
         }
     }
 `;
-export const Star = styled.span`
-    cursor: pointer;
-    font-size: 20px;
-    margin-right: 8px;
-    &:hover {
-        color: #ff9900;
-    }
-`;
 
 export const SubmitButton = styled.button`
     position: absolute;
@@ -92,15 +84,6 @@ export const SubmitButton = styled.button`
     font-size: 18px;
     width: 35px;
     height: 35px;
-`;
-
-export const ErrorMessage = styled.span`
-    color: red;
-    font-size: 12px;
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    margin-left: 15px;
 `;
 
 export const UserResponse = styled.div`
