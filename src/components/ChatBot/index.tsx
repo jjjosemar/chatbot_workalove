@@ -33,6 +33,11 @@ const ChatBot: React.FC = () => {
     const [formData, setFormData] = useState<Partial<FormData>>({});
     const [isRated, setIsRated] = useState<boolean>(false);
     const [isFinish, setIsFinish] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [step]);
 
     const handleNextStep = async (data: Partial<FormData>, field: string) => {
         try {
@@ -106,6 +111,7 @@ const ChatBot: React.FC = () => {
                                 <UserResponse>{formData.name}</UserResponse>
                             ) : <>
                                 <InputCustom
+                                    ref={inputRef}
                                     type="text"
                                     name="name"
                                     placeholder={"Informe seu nome"}
@@ -127,6 +133,7 @@ const ChatBot: React.FC = () => {
                             ) : <>
                                 <InputCity
                                     name={'location'}
+                                    ref={inputRef}
                                     placeholder={"Informe sua cidade"}
                                     changeValue={(value) => setFormData({ ...formData, location: value })}
                                 />
@@ -147,6 +154,7 @@ const ChatBot: React.FC = () => {
                                 <InputCustom
                                     type="text"
                                     name="email"
+                                    ref={inputRef}
                                     placeholder={"Informe seu e-mail"}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />

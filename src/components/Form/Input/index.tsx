@@ -4,6 +4,7 @@ import { InputCustom, ErrorMessage } from "./styles";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     name: string;
+    ref?: React.Ref<HTMLInputElement>;
 }
 
 const Input: React.FC<InputProps> = ({ name, ...rest }) => {
@@ -16,6 +17,8 @@ const Input: React.FC<InputProps> = ({ name, ...rest }) => {
             ref: inputRef.current,
             path: "value",
         });
+
+        inputRef.current?.focus();
     }, [fieldName, registerField]);
 
     return (
@@ -34,4 +37,3 @@ const Input: React.FC<InputProps> = ({ name, ...rest }) => {
 };
 
 export default Input;
-

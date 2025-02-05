@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { useField } from "@unform/core";
 import {ErrorMessage, InputCustom} from "../Input/styles";
 import {ContainerOptions} from "./styles";
+import axios from "axios";
 
-interface AutocompleteCidadeProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     name: string;
     changeValue: (value: string) => void;
+    ref?: React.Ref<HTMLInputElement>;
 }
 
-const InputCity: React.FC<AutocompleteCidadeProps> = ({ changeValue, name, ...rest }) => {
+const InputCity: React.FC<InputProps> = ({ changeValue, name, ...rest }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const { fieldName, defaultValue, registerField, error } = useField(name);
     const [search, setSearch] = useState<string>(defaultValue || "");
@@ -22,10 +24,10 @@ const InputCity: React.FC<AutocompleteCidadeProps> = ({ changeValue, name, ...re
 
         const fetchCities = async () => {
             try {
-                const response = await fetch(
+                const response = await axios.get(
                     `https://nominatim.openstreetmap.org/search?city=${search}&format=json&addressdetails=1`
                 );
-                const data = await response.json();
+                const data = await response.data;
 
                 const uniqueCities = new Set<string>();
                 const filteredCities = data
