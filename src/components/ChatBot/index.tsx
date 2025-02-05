@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Form} from '@unform/web';
 import * as Yup from 'yup';
+import {ValidationError} from 'yup';
 import {
     ChatContainer,
     ContainerForm,
@@ -8,15 +9,17 @@ import {
     ContainerMessage,
     HeaderChat,
     Message,
-    NextStepButton, SubmitButton, SuccessMessage,
+    NextStepButton,
+    SubmitButton,
+    SuccessMessage,
     UserResponse
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
 import {LuBot} from "react-icons/lu";
 import InputCustom from "../Form/Input";
 import RatingStars from "../RatingStars";
-import {ValidationError} from "yup";
 import {FormHandles} from "@unform/core";
+import InputCity from "../Form/InputCity";
 
 interface FormData {
     name: string;
@@ -67,8 +70,6 @@ const ChatBot: React.FC = () => {
             handleNextStep({ location: formData.location }, 'location');
         } else if (step === 2) {
             handleNextStep({ email: formData.email }, 'email');
-        } else if (step === 3) {
-            console.log('Dados enviados:', formData);
         }
     };
 
@@ -107,6 +108,7 @@ const ChatBot: React.FC = () => {
                                 <InputCustom
                                     type="text"
                                     name="name"
+                                    placeholder={"Informe seu nome"}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </>}
@@ -123,18 +125,11 @@ const ChatBot: React.FC = () => {
                             {step > 1 && formData.location ? (
                                 <UserResponse>{formData.location}</UserResponse>
                             ) : <>
-                                <InputCustom
-                                    type="text"
-                                    name="location"
-                                    list="cities"
-                                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                <InputCity
+                                    name={'location'}
+                                    placeholder={"Informe sua cidade"}
+                                    changeValue={(value) => setFormData({ ...formData, location: value })}
                                 />
-                                <datalist id="cities">
-                                    <option value="São Paulo, SP" />
-                                    <option value="Rio de Janeiro, RJ" />
-                                    <option value="Belo Horizonte, MG" />
-                                    <option value="Curitiba, PR" />
-                                </datalist>
                             </>}
                         </>
                     )}
@@ -152,6 +147,7 @@ const ChatBot: React.FC = () => {
                                 <InputCustom
                                     type="text"
                                     name="email"
+                                    placeholder={"Informe seu e-mail"}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </>}
