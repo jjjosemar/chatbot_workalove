@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form} from '@unform/web';
 import * as Yup from 'yup';
 import {
     ChatContainer,
-    ContainerForm, ContainerIconBot, ContainerMessage,
+    ContainerForm,
+    ContainerIconBot,
+    ContainerMessage,
     ErrorMessage,
     HeaderChat,
     Input,
@@ -60,11 +62,15 @@ const ChatBot: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        document.getElementById('containerForm').scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, [step]);
+
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <ContainerForm>
-                <Form onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
+            <Form onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
+                <ContainerForm id={"containerForm"}>
                     {step >= 0 && (
                         <>
                             <ContainerMessage>
@@ -88,7 +94,12 @@ const ChatBot: React.FC = () => {
                     )}
                     {step >= 1 && (
                         <>
-                            <Message>Que satisfação {formData.name}. Agora que sei seu nome, qual a cidade e estado que você mora?</Message>
+                            <ContainerMessage>
+                                <ContainerIconBot>
+                                    <LuBot size={30}/>
+                                </ContainerIconBot>
+                                <Message>Que satisfação {formData.name}. Agora que sei seu nome, qual a cidade e estado que você mora?</Message>
+                            </ContainerMessage>
                             {step > 1 && formData.location ? (
                                 <UserResponse>{formData.location}</UserResponse>
                             ) : <>
@@ -111,7 +122,12 @@ const ChatBot: React.FC = () => {
                     )}
                     {step >= 2 && (
                         <div>
-                            <Message>Agora me fala teu e-mail, por gentileza</Message>
+                            <ContainerMessage>
+                                <ContainerIconBot>
+                                    <LuBot size={30}/>
+                                </ContainerIconBot>
+                                <Message>Agora me fala teu e-mail, por gentileza</Message>
+                            </ContainerMessage>
                             {step > 2 && formData.email ? (
                                 <UserResponse>{formData.email}</UserResponse>
                             ) : <>
@@ -127,7 +143,12 @@ const ChatBot: React.FC = () => {
                     )}
                     {step === 3 && (
                         <div>
-                            <Message>Você finalizou o teste. Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</Message>
+                            <ContainerMessage>
+                                <ContainerIconBot>
+                                    <LuBot size={30}/>
+                                </ContainerIconBot>
+                                <Message>Você finalizou o teste. Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</Message>
+                            </ContainerMessage>
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <Star key={star} onClick={() => setFormData({ ...formData, rating: star })}>
                                     ⭐
@@ -135,11 +156,11 @@ const ChatBot: React.FC = () => {
                             ))}
                         </div>
                     )}
-                    <SubmitButton type="button" onClick={handleSubmit}>
-                        {step < 3 ? <IoMdSend color={'#f0f'}/> : 'Enviar'}
-                    </SubmitButton>
-                </Form>
-            </ContainerForm>
+                </ContainerForm>
+                <SubmitButton type="button" onClick={handleSubmit}>
+                    {step < 3 ? <IoMdSend color={'#f0f'}/> : 'Enviar'}
+                </SubmitButton>
+            </Form>
         </ChatContainer>
     );
 };
