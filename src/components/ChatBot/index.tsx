@@ -72,13 +72,6 @@ const ChatBot: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        const containerForm = document.getElementById('containerForm');
-        if (containerForm) {
-            containerForm.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
-    }, [step]);
-
     const handleRating = (rating: number) => {
         setFormData({ ...formData, rating });
         setIsRated(true);
@@ -90,11 +83,16 @@ const ChatBot: React.FC = () => {
         setIsFinish(true);
     };
 
+
+    useEffect(() => {
+        document.getElementById("scroll-auto")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [step]);
+
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <Form ref={formRef} onSubmit={handleSubmit}>
-                <ContainerForm id={"containerForm"}>
+            <Form ref={formRef} onSubmit={handleSubmit} style={{ overflowY: 'auto'}}>
+                <ContainerForm>
                     {step >= 0 && (
                         <>
                             <ContainerMessage>
@@ -180,6 +178,7 @@ const ChatBot: React.FC = () => {
                             </>}
                         </>
                     )}
+                    <div id={"scroll-auto"}></div>
                 </ContainerForm>
                 {step < 3 && <>
                   <NextStepButton type="button" onClick={handleSubmit}>

@@ -21,6 +21,7 @@ export const ChatContainer = styled.div`
 export const ContainerForm = styled.div`
     padding: 0 15px 90px;
     overflow-y: auto;
+    max-height: 350px;
 `;
 
 export const HeaderChat = styled.div`
