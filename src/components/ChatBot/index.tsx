@@ -8,7 +8,6 @@ import {
     ContainerMessage,
     ErrorMessage,
     HeaderChat,
-    Input,
     Message,
     Star,
     SubmitButton,
@@ -16,6 +15,7 @@ import {
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
 import {LuBot} from "react-icons/lu";
+import InputCustom from "../Form/Input";
 
 interface FormData {
     name: string;
@@ -82,7 +82,7 @@ const ChatBot: React.FC = () => {
                             {step > 0 && formData.name ? (
                                 <UserResponse>{formData.name}</UserResponse>
                             ) : <>
-                                <Input
+                                <InputCustom
                                     type="text"
                                     name="name"
                                     hasError={!!errors.name}
@@ -103,7 +103,7 @@ const ChatBot: React.FC = () => {
                             {step > 1 && formData.location ? (
                                 <UserResponse>{formData.location}</UserResponse>
                             ) : <>
-                                <Input
+                                <InputCustom
                                     type="text"
                                     name="location"
                                     list="cities"
@@ -131,7 +131,7 @@ const ChatBot: React.FC = () => {
                             {step > 2 && formData.email ? (
                                 <UserResponse>{formData.email}</UserResponse>
                             ) : <>
-                                <Input
+                                <InputCustom
                                     type="email"
                                     name="email"
                                     hasError={!!errors.email}
