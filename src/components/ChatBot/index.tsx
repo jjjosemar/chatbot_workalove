@@ -32,7 +32,7 @@ const ChatBot: React.FC = () => {
         try {
             let schema;
             if (field === 'name') {
-                schema = Yup.object().shape({ name: Yup.string().required('Por favor, informe seu cidade') });
+                schema = Yup.object().shape({ name: Yup.string().required('Por favor, informe seu nome') });
             } else if (field === 'location') {
                 schema = Yup.object().shape({ location: Yup.string().required('Por favor, informe sua cidade') });
             } else if (field === 'email') {

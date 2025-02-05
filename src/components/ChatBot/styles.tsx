@@ -19,7 +19,7 @@ export const ChatContainer = styled.div`
 `;
 
 export const ContainerForm = styled.div`
-    padding: 0 15px 65px;
+    padding: 0 15px 90px;
     overflow-y: auto;
 `;
 
@@ -70,27 +70,19 @@ export const Message = styled.p`
 export const Input = styled.input<{ hasError?: boolean }>`
     width: 72%;
     padding: 12px 15% 12px 15px;
-    margin-bottom: 15px;
     border: 1px solid ${({hasError}) => (hasError ? 'red' : '#ddd')};
     border-radius: 20px;
     font-size: 14px;
     background-color: #f9f9f9;
     position: absolute;
-    bottom: 1px;
+    bottom: 10px;
     left: 0;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin: 18px 15px 15px;
 
     &:focus {
         border-color: ${({hasError}) => (hasError ? 'red' : '#007BFF')};
         outline: none;
     }
-`;
-
-export const ErrorMessage = styled.span`
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
 `;
 
 export const Star = styled.span`
@@ -105,7 +97,7 @@ export const Star = styled.span`
 export const SubmitButton = styled.button`
     position: absolute;
     right: 20px;
-    bottom: 1px;
+    bottom: 10px;
     transform: translateY(-50%);
     padding: 8px;
     background-color: transparent;
@@ -119,6 +111,15 @@ export const SubmitButton = styled.button`
     font-size: 18px;
     width: 35px;
     height: 35px;
+`;
+
+export const ErrorMessage = styled.span`
+    color: red;
+    font-size: 12px;
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    margin-left: 15px;
 `;
 
 export const UserResponse = styled.div`
