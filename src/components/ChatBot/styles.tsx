@@ -21,6 +21,7 @@ export const ChatContainer = styled.div`
 export const ContainerForm = styled.div`
     padding: 0 15px 90px;
     overflow-y: auto;
+    max-height: 350px;
 `;
 
 export const HeaderChat = styled.div`
@@ -67,34 +68,7 @@ export const Message = styled.p`
     }
 `;
 
-export const Input = styled.input<{ hasError?: boolean }>`
-    width: 72%;
-    padding: 12px 15% 12px 15px;
-    border: 1px solid ${({hasError}) => (hasError ? 'red' : '#ddd')};
-    border-radius: 20px;
-    font-size: 14px;
-    background-color: #f9f9f9;
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    margin: 18px 15px 15px;
-
-    &:focus {
-        border-color: ${({hasError}) => (hasError ? 'red' : '#007BFF')};
-        outline: none;
-    }
-`;
-
-export const Star = styled.span`
-    cursor: pointer;
-    font-size: 20px;
-    margin-right: 8px;
-    &:hover {
-        color: #ff9900;
-    }
-`;
-
-export const SubmitButton = styled.button`
+export const NextStepButton = styled.button`
     position: absolute;
     right: 20px;
     bottom: 10px;
@@ -113,13 +87,27 @@ export const SubmitButton = styled.button`
     height: 35px;
 `;
 
-export const ErrorMessage = styled.span`
-    color: red;
-    font-size: 12px;
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    margin-left: 15px;
+export const SubmitButton = styled.button`
+    background-color: #6200ea; 
+    color: #fff; 
+    font-size: 16px;  
+    font-weight: bold;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    transition: all 0.3s ease; 
+    margin: 20px auto;
+    display: block;
+    
+    &:hover {
+        background-color: #3700b3; 
+    }
+
+    &:focus {
+        outline: none; 
+        box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
+    }
 `;
 
 export const UserResponse = styled.div`
@@ -149,4 +137,19 @@ export const ContainerIconBot = styled.div`
     align-self: flex-end;
     margin-block-start: 1em;
     margin-block-end: 1em;
+`;
+
+export const SuccessMessage = styled.h5`
+  display: block;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #c3e6cb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;

@@ -1,21 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Form} from '@unform/web';
 import * as Yup from 'yup';
+import {ValidationError} from 'yup';
 import {
     ChatContainer,
     ContainerForm,
     ContainerIconBot,
     ContainerMessage,
-    ErrorMessage,
     HeaderChat,
-    Input,
     Message,
-    Star,
+    NextStepButton,
     SubmitButton,
+    SuccessMessage,
     UserResponse
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
 import {LuBot} from "react-icons/lu";
+import InputCustom from "../Form/Input";
+import RatingStars from "../RatingStars";
+import {FormHandles} from "@unform/core";
+import InputCity from "../Form/InputCity";
 
 interface FormData {
     name: string;
@@ -24,9 +28,16 @@ interface FormData {
     rating: number;
 }
 const ChatBot: React.FC = () => {
+    const formRef =  useRef<FormHandles>(null);
     const [step, setStep] = useState<number>(0);
     const [formData, setFormData] = useState<Partial<FormData>>({});
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isRated, setIsRated] = useState<boolean>(false);
+    const [isFinish, setIsFinish] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [step]);
 
     const handleNextStep = async (data: Partial<FormData>, field: string) => {
         try {
@@ -40,12 +51,19 @@ const ChatBot: React.FC = () => {
             }
             if (schema) await schema.validate(data, { abortEarly: false });
 
-            setErrors({});
             setFormData((prev) => ({ ...prev, ...data }));
             setStep((prevStep) => prevStep + 1);
         } catch (err) {
             if (err instanceof Yup.ValidationError) {
-                setErrors({ [field]: err.errors[0] });
+                const validationErrors: Record<string, string> = {};
+
+                err.inner.forEach((error : ValidationError) => {
+                    if (error.path) {
+                        validationErrors[error.path] = error.message;
+                    }
+                });
+
+                formRef.current?.setErrors(validationErrors);
             }
         }
     };
@@ -57,20 +75,30 @@ const ChatBot: React.FC = () => {
             handleNextStep({ location: formData.location }, 'location');
         } else if (step === 2) {
             handleNextStep({ email: formData.email }, 'email');
-        } else if (step === 3) {
-            console.log('Dados enviados:', formData);
         }
     };
 
+    const handleRating = (rating: number) => {
+        setFormData({ ...formData, rating });
+        setIsRated(true);
+    };
+
+    const handleSave = () => {
+        console.log('===== informações coletadas =====');
+        console.log(formData);
+        setIsFinish(true);
+    };
+
+
     useEffect(() => {
-        document.getElementById('containerForm').scrollIntoView({ behavior: 'smooth', block: 'end' });
+        document.getElementById("scroll-auto")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, [step]);
 
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <Form onSubmit={handleSubmit} style={{ overflowY: "auto" }}>
-                <ContainerForm id={"containerForm"}>
+            <Form ref={formRef} onSubmit={handleSubmit} style={{ overflowY: 'auto'}}>
+                <ContainerForm>
                     {step >= 0 && (
                         <>
                             <ContainerMessage>
@@ -82,13 +110,13 @@ const ChatBot: React.FC = () => {
                             {step > 0 && formData.name ? (
                                 <UserResponse>{formData.name}</UserResponse>
                             ) : <>
-                                <Input
+                                <InputCustom
+                                    ref={inputRef}
                                     type="text"
                                     name="name"
-                                    hasError={!!errors.name}
+                                    placeholder={"Informe seu nome"}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
-                                {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
                             </>}
                         </>
                     )}
@@ -103,20 +131,12 @@ const ChatBot: React.FC = () => {
                             {step > 1 && formData.location ? (
                                 <UserResponse>{formData.location}</UserResponse>
                             ) : <>
-                                <Input
-                                    type="text"
-                                    name="location"
-                                    list="cities"
-                                    hasError={!!errors.location}
-                                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                <InputCity
+                                    name={'location'}
+                                    ref={inputRef}
+                                    placeholder={"Informe sua cidade"}
+                                    changeValue={(value) => setFormData({ ...formData, location: value })}
                                 />
-                                <datalist id="cities">
-                                    <option value="São Paulo, SP" />
-                                    <option value="Rio de Janeiro, RJ" />
-                                    <option value="Belo Horizonte, MG" />
-                                    <option value="Curitiba, PR" />
-                                </datalist>
-                                {errors.location && <ErrorMessage>{errors.location}</ErrorMessage>}
                             </>}
                         </>
                     )}
@@ -131,35 +151,44 @@ const ChatBot: React.FC = () => {
                             {step > 2 && formData.email ? (
                                 <UserResponse>{formData.email}</UserResponse>
                             ) : <>
-                                <Input
-                                    type="email"
+                                <InputCustom
+                                    type="text"
                                     name="email"
-                                    hasError={!!errors.email}
+                                    ref={inputRef}
+                                    placeholder={"Informe seu e-mail"}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
-                                {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                             </>}
                         </div>
                     )}
-                    {step === 3 && (
-                        <div>
+                    {step >= 3 && (
+                        <>
                             <ContainerMessage>
                                 <ContainerIconBot>
                                     <LuBot size={30}/>
                                 </ContainerIconBot>
                                 <Message>Você finalizou o teste. Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</Message>
                             </ContainerMessage>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star key={star} onClick={() => setFormData({ ...formData, rating: star })}>
-                                    ⭐
-                                </Star>
-                            ))}
-                        </div>
+                            <RatingStars onRate={handleRating} />
+                            {isRated && !isFinish && <>
+                              <SubmitButton type={"button"} onClick={handleSave}>
+                                Salvar
+                              </SubmitButton>
+                            </>}
+                            {isFinish && <>
+                              <SuccessMessage>
+                                Seus dados foram salvos com sucesso! Agradecemos pela sua participação.
+                              </SuccessMessage>
+                            </>}
+                        </>
                     )}
+                    <div id={"scroll-auto"}></div>
                 </ContainerForm>
-                <SubmitButton type="button" onClick={handleSubmit}>
-                    {step < 3 ? <IoMdSend color={'#f0f'}/> : 'Enviar'}
-                </SubmitButton>
+                {step < 3 && <>
+                  <NextStepButton type="button" onClick={handleSubmit}>
+                    <IoMdSend color={'#f0f'}/>
+                  </NextStepButton>
+                </>}
             </Form>
         </ChatContainer>
     );
