@@ -41,6 +41,7 @@ export const ContainerMessage = styled.div`
 `;
 
 export const Message = styled.p`
+    text-align: left;
     border-radius: 18px 18px 18px 0;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,0.15);
     display: inline-block;
