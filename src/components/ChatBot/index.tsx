@@ -97,7 +97,8 @@ const ChatBot: React.FC = () => {
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            <Form ref={formRef} onSubmit={handleSubmit} style={{ overflowY: 'auto'}}>
+            {// @ts-ignore}
+            <Form ref={formRef} onSubmit={handleSubmit}>
                 <ContainerForm>
                     {step >= 0 && (
                         <>
