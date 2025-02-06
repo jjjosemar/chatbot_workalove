@@ -92,7 +92,7 @@ const ChatBot: React.FC = () => {
 
     useEffect(() => {
         document.getElementById("scroll-auto")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, [step]);
+    }, [step, isFinish]);
 
     return (
         <ChatContainer>

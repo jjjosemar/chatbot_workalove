@@ -33,6 +33,7 @@ export const HeaderChat = styled.div`
     overflow: hidden;
     padding-left: 15px;
     padding-right: 15px;
+    font-weight: bold;
 `;
 
 export const ContainerMessage = styled.div`
@@ -46,8 +47,8 @@ export const Message = styled.p`
     max-width: 60%;
     margin-left: 10px;
     padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
+    background-color: #fff;
+    color: #4a4a4a;
     position: relative;
     font-size: 14px;
     line-height: 1.4;
@@ -111,12 +112,12 @@ export const SubmitButton = styled.button`
 `;
 
 export const UserResponse = styled.div`
+    background-color: #007BFF;
+    color: white;
     border-radius: 18px 18px 18px 18px;
     max-width: 60%;
     width: fit-content;
     padding: 10px 15px;
-    background-color: #fff;
-    color: #4a4a4a;
     position: relative;
     font-size: 14px;
     line-height: 1.4;
@@ -129,7 +130,7 @@ export const ContainerIconBot = styled.div`
     border-radius: 50%;
     height: 40px;
     width: 40px;
-    background: #61dafb;
+    background: #e4e4e4;
     display: flex;
     justify-content: center;
     align-items: center;
