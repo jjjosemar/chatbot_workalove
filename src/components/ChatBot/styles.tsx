@@ -7,7 +7,7 @@ export const ChatContainer = styled.div`
     right: 20px;
     width: 350px;
     max-height: 500px;
-    min-height: 250px;
+    min-height: 400px;
     max-width: 100%;
     background-color: #f5f8fb;
     border-radius: 8px;

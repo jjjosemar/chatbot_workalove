@@ -16,7 +16,7 @@ import {
 } from "./styles";
 import {IoMdSend} from "react-icons/io";
 import {LuBot} from "react-icons/lu";
-import InputCustom from "../Form/Input";
+import Input from "../Form/Input";
 import RatingStars from "../RatingStars";
 import {FormHandles} from "@unform/core";
 import InputCity from "../Form/InputCity";
@@ -24,6 +24,7 @@ import InputCity from "../Form/InputCity";
 interface FormData {
     name: string;
     location: string;
+    birthData: string;
     email: string;
     rating: number;
 }
@@ -46,6 +47,8 @@ const ChatBot: React.FC = () => {
                 schema = Yup.object().shape({ name: Yup.string().required('Por favor, informe seu nome') });
             } else if (field === 'location') {
                 schema = Yup.object().shape({ location: Yup.string().required('Por favor, informe sua cidade') });
+            } else if (field === 'birthData') {
+                schema = Yup.object().shape({ birthData: Yup.string().required('Por favor, informe sua de nascimento') });
             } else if (field === 'email') {
                 schema = Yup.object().shape({ email: Yup.string().email('E-mail inválido').required('Por favor, informe seu E-mail') });
             }
@@ -69,11 +72,14 @@ const ChatBot: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+        console.log(formData);
         if (step === 0) {
             handleNextStep({ name: formData.name }, 'name');
         } else if (step === 1) {
             handleNextStep({ location: formData.location }, 'location');
         } else if (step === 2) {
+            handleNextStep({ birthData: formData.birthData }, 'birthData');
+        } else if (step === 3) {
             handleNextStep({ email: formData.email }, 'email');
         }
     };
@@ -116,7 +122,7 @@ const ChatBot: React.FC = () => {
                             {step > 0 && formData.name ? (
                                 <UserResponse>{formData.name}</UserResponse>
                             ) : <>
-                                <InputCustom
+                                <Input
                                     ref={inputRef}
                                     type="text"
                                     name="name"
@@ -147,6 +153,33 @@ const ChatBot: React.FC = () => {
                         </>
                     )}
                     {step >= 2 && (
+                        <>
+                            <ContainerMessage>
+                                <ContainerIconBot>
+                                    <LuBot size={30}/>
+                                </ContainerIconBot>
+                                <Message>Legal, agora que sabemos sua cidade e estado. Quando foi que você nasceu?</Message>
+                            </ContainerMessage>
+                            {step > 2 && formData.birthData ? (
+                                <UserResponse>{formData.birthData}</UserResponse>
+                            ) : <>
+                                <Input
+                                    ref={inputRef}
+                                    type="date"
+                                    name="birthData"
+                                    placeholder={"Informe sua data de nascimento"}
+                                    onChange={(e) => setFormData({ ...formData, birthData: e.target.value })}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            formRef.current?.submitForm();
+                                        }
+                                    }}
+                                />
+                            </>}
+                        </>
+                    )}
+                    {step >= 3 && (
                         <div>
                             <ContainerMessage>
                                 <ContainerIconBot>
@@ -154,10 +187,10 @@ const ChatBot: React.FC = () => {
                                 </ContainerIconBot>
                                 <Message>Agora me fala teu e-mail, por gentileza</Message>
                             </ContainerMessage>
-                            {step > 2 && formData.email ? (
+                            {step > 3 && formData.email ? (
                                 <UserResponse>{formData.email}</UserResponse>
                             ) : <>
-                                <InputCustom
+                                <Input
                                     type="text"
                                     name="email"
                                     ref={inputRef}
@@ -167,7 +200,7 @@ const ChatBot: React.FC = () => {
                             </>}
                         </div>
                     )}
-                    {step >= 3 && (
+                    {step >= 4 && (
                         <>
                             <ContainerMessage>
                                 <ContainerIconBot>
@@ -190,7 +223,7 @@ const ChatBot: React.FC = () => {
                     )}
                     <div id={"scroll-auto"}></div>
                 </ContainerForm>
-                {step < 3 && <>
+                {step < 4 && <>
                   <NextStepButton type="button" onClick={handleSubmit}>
                     <IoMdSend color={'#6200ea'}/>
                   </NextStepButton>
