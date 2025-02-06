@@ -44,7 +44,7 @@ const ChatBot: React.FC = () => {
         try {
             let schema;
             if (field === 'name') {
-                schema = Yup.object().shape({ name: Yup.string().required('Por favor, informe seu nome') });
+                schema = Yup.object().shape({ name: Yup.string().required('Por favor, informe seu nome e sobrenome') });
             } else if (field === 'location') {
                 schema = Yup.object().shape({ location: Yup.string().required('Por favor, informe sua cidade') });
             } else if (field === 'birthData') {
@@ -125,7 +125,7 @@ const ChatBot: React.FC = () => {
                                     ref={inputRef}
                                     type="text"
                                     name="name"
-                                    placeholder={"Informe seu nome"}
+                                    placeholder={"Informe seu nome e sobrenome"}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </>}
