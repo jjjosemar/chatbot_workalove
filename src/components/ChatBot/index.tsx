@@ -72,7 +72,6 @@ const ChatBot: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        console.log(formData);
         if (step === 0) {
             handleNextStep({ name: formData.name }, 'name');
         } else if (step === 1) {

@@ -6,7 +6,7 @@ export const ChatContainer = styled.div`
     bottom: 20px;
     right: 20px;
     width: 350px;
-    max-height: 500px;
+    max-height: 580px;
     min-height: 400px;
     max-width: 100%;
     background-color: #f5f8fb;
@@ -21,6 +21,7 @@ export const ChatContainer = styled.div`
 export const ContainerForm = styled.div`
     padding: 0 15px 90px;
     overflow-y: auto;
+    margin-bottom: 64px;
     max-height: 350px;
 `;
 
