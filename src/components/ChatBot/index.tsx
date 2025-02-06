@@ -192,7 +192,7 @@ const ChatBot: React.FC = () => {
                 </ContainerForm>
                 {step < 3 && <>
                   <NextStepButton type="button" onClick={handleSubmit}>
-                    <IoMdSend color={'#f0f'}/>
+                    <IoMdSend color={'#6200ea'}/>
                   </NextStepButton>
                 </>}
             </Form>
