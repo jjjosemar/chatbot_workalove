@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import { useField } from "@unform/core";
 import {ErrorMessage, InputCustom} from "../Input/styles";
 import {ContainerOptions} from "./styles";
@@ -65,9 +65,11 @@ const InputCity: React.FC<InputProps> = ({ changeValue, name, ...rest }) => {
         });
     }, [fieldName, registerField]);
 
-    useEffect(() => {
+    const updateChangeValue = useCallback(() => {
         changeValue(search);
-    }, [search, changeValue]);
+    }, [search]);
+
+    useEffect(updateChangeValue, [search]);
 
     return (
         <div>
