@@ -97,8 +97,13 @@ const ChatBot: React.FC = () => {
     return (
         <ChatContainer>
             <HeaderChat>Chatbot</HeaderChat>
-            {// @ts-ignore}
-            <Form ref={formRef} onSubmit={handleSubmit}>
+            <Form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                placeholder=""
+                onPointerEnterCapture={() => {}}
+                onPointerLeaveCapture={() => {}}
+            >
                 <ContainerForm>
                     {step >= 0 && (
                         <>
